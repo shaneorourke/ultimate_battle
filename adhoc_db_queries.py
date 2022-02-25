@@ -26,3 +26,15 @@ print(out)
 c.execute("SELECT * FROM bank")
 out = c.fetchall()
 print(out)
+
+
+c.execute("SELECT * FROM superheroes_stats st INNER JOIN superheroes_info inf ON st.'name' = inf.'name' WHERE st.name = 'Ultron' LIMIT 1")
+out = c.fetchall()
+print(out)
+
+c.execute("SELECT * FROM superheroes_stats st WHERE st.name = 'Ultron'")
+out = c.fetchall()
+#print(out)
+c.execute("SELECT * FROM superheroes_info st WHERE st.name = 'Ultron'")
+out = c.fetchall()
+#print(out)
