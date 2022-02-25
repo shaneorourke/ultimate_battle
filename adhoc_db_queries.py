@@ -18,6 +18,11 @@ c.execute("""SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIK
 out = c.fetchall()
 print(out)
 
-c.execute("SELECT * FROM records where wins >= 1 OR losses >= 1")
+c.execute("SELECT * FROM records where wins >= 2 OR losses >= 2")
+out = c.fetchall()
+print(out)
+
+
+c.execute("SELECT * FROM bank")
 out = c.fetchall()
 print(out)
