@@ -10,13 +10,18 @@ c.execute(f'SELECT max("index") FROM superheroes_stats')
 max_index = c.fetchone()
 
 replace = ['(',')',',','./data/','csv','.']
+replace_number = ['(',')',',']
 
-def clean_up_sql_out(text):
-    for s in replace:
-        text = str(text).replace(s,'')
+def clean_up_sql_out(text,isnumber):
+    if isnumber == 1:
+        for s in replace_number:
+            text = str(text).replace(s,'')      
+    else:
+        for s in replace:
+            text = str(text).replace(s,'')
     return text
 
-max_index = int(clean_up_sql_out(max_index))
+max_index = round(float(clean_up_sql_out(max_index,0)),2)
 
 def cls():
     print('\n'*50)
@@ -73,35 +78,35 @@ def main():
         win_or_lose = False
     c.execute('SELECT balance FROM bank')
     balance = c.fetchone()
-    balance = clean_up_sql_out(balance)
+    balance = clean_up_sql_out(balance,1)
     if balance == '0':
         print('You\'re out of funds, here\'s £10 to help you build that balance again')
         ba.amend_funds(10)
         balance = 10
 
     odds = od.calc_odds(char_df['index'].iloc[0],char_df['index'].iloc[1])
-    print(f'Odds:{odds}/1')
+    print(f'Odds:{odds}')
     print('Quick bets: a=10% b=25% c=50% d=75%')
     bet_amount = input(f'Balance:£{balance} Bet Amount:£')
     if bet_amount.lower() in ('a','b','c','d'):
         if bet_amount.lower() == 'a':
-            bet_amount_default = int(balance)*0.1
+            bet_amount_default = round(round(float(balance),2)*0.1,2)
         if bet_amount.lower() == 'b':
-            bet_amount_default = int(balance)*0.25
+            bet_amount_default = round(round(float(balance),2)*0.25,2)
         if bet_amount.lower() == 'c':
-            bet_amount_default = int(balance)*0.5
+            bet_amount_default = round(round(float(balance),2)*0.5,2)
         if bet_amount.lower() == 'd':
-            bet_amount_default = int(balance)*0.75
+            bet_amount_default = round(round(float(balance),2)*0.75,2)
     else:
         bet_amount_default = bet_amount
-    bet_amount = int(bet_amount_default)
-    if int(bet_amount) > int(balance):
+    bet_amount = round(float(bet_amount_default),2)
+    if round(float(bet_amount),2) > round(float(balance),2):
         print(f'You havent got the funds for this bet - Setting bet to £{balance}')
-        bet_amount = int(balance)
+        bet_amount = round(float(balance),2)
         wait = input('Press Enter to Continue')
 
     cls()
-    
+
     if char_df['total'].iloc[0] > char_df['total'].iloc[1] and win_or_lose:
         print('##################### WIN #####################')
         winner = char_df['index'].iloc[0]
@@ -111,7 +116,7 @@ def main():
         conn.commit()
         c.execute(f'UPDATE records SET losses = losses+1 WHERE "index" = {loser}')
         conn.commit()
-        amount = bet_amount*odds
+        amount = round(bet_amount*odds,2)
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] < char_df['total'].iloc[1] and win_or_lose == False:
@@ -123,7 +128,7 @@ def main():
         conn.commit()
         c.execute(f'UPDATE records SET losses = losses+1 WHERE "index" = {loser}')
         conn.commit()
-        amount = bet_amount*odds
+        amount = round(bet_amount*odds,2)
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] == char_df['total'].iloc[1]:
@@ -147,7 +152,7 @@ def main():
     print(f'Payout:£{amount}')
     c.execute('SELECT balance FROM bank')
     balance = c.fetchone()
-    balance = clean_up_sql_out(balance)
+    balance = clean_up_sql_out(balance,1)
     print()
     print(f'New Balance:{balance}')
 
