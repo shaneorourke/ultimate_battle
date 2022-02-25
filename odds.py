@@ -17,7 +17,7 @@ def calc_odds(char_1,char_2):
     max_total = clean_up_sql_out(max_total)
     print(f'ODDS:total wins:{max_total}')
     if max_total == None or max_total == 'None':
-        max_total = 2
+        max_total = 1
 
     c.execute(f'select wins from records WHERE "index" = {char_1}')
     wins = c.fetchone()
@@ -25,9 +25,14 @@ def calc_odds(char_1,char_2):
     print(f'ODDS:char 1 wins:{wins}')
     if wins == 0:
         wins = 1
-    odds = int((int(max_total) / int(wins)))
+    odds_2 = 1 / (int(max_total) - int(wins))
+
+    odds = (1 / odds_2) / 100
+
     return odds
 
 
 if __name__ == '__main__':
     print('poop')
+
+   
