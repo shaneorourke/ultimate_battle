@@ -49,4 +49,7 @@ def char_selector():
         result = c.fetchone()
     return result
 
-print(char_selector())
+c.execute('select sum(payout) from bets')
+out = c.fetchall()
+for row in out:
+    print(row)
