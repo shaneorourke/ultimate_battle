@@ -4,6 +4,7 @@ import pandas as pd
 import bank as ba
 import odds as od
 
+
 conn = sql.connect('characters.db')
 c = conn.cursor()
 c.execute(f'SELECT max("index") FROM superheroes_stats')
@@ -39,6 +40,9 @@ def char_selector(max_index):
     index = randint(1,max_index)
     c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher FROM superheroes_stats st INNER JOIN superheroes_info inf ON st.name = inf.name WHERE st."index"={index} LIMIT 1')
     result = c.fetchone()
+    if result == None:
+        c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher FROM superheroes_stats st LEFT JOIN superheroes_info inf ON REPLACE(REPLACE(st.name," ",""),"I","") = REPLACE(inf.name," ","") WHERE st."index"={index} LIMIT 1')
+        result = c.fetchone()
     return result
     
 def bet_record(char_1, char_2, winner, bet_amount, payout, odds, balance_before, balance_after):
@@ -72,7 +76,7 @@ def main():
         print('Durability:',char_df['durability'].iloc[iloc])
         print('Power:',char_df['power'].iloc[iloc])
         print('Combat:',char_df['combat'].iloc[iloc])
-        print('Total:',char_df['total'].iloc[iloc])
+        print('Total:',round(char_df['total'].iloc[iloc],2))
 
     print()
     print_stats(0)
@@ -140,7 +144,7 @@ def main():
         print('##################### WIN #####################')
         winner = char_df['index'].iloc[1]
         loser = char_df['index'].iloc[0]
-        print(f'winner:{winner} loser:{loser}')
+
         c.execute(f'UPDATE records SET wins = wins+1 WHERE "index" = {winner}')
         conn.commit()
         c.execute(f'UPDATE records SET losses = losses+1 WHERE "index" = {loser}')
@@ -157,9 +161,17 @@ def main():
         conn.commit()
     else:
         print('##################### LOSE #####################')
+        if win_or_lose == True:
+            winner = char_df['index'].iloc[0]
+            loser = char_df['index'].iloc[1]
+        else:
+            winner = char_df['index'].iloc[1]
+            loser = char_df['index'].iloc[0]
+
         amount = round_float(bet_amount*-1)
         ba.amend_funds(amount)
     conn.commit()
+    print(f'winner:{winner} loser:{loser}')
     print_stats(0)
     print()
     print_stats(1)
