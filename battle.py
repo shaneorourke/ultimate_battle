@@ -41,6 +41,11 @@ def char_selector(max_index):
     result = c.fetchone()
     return result
     
+def bet_record(char_1, char_2, winner, bet_amount, payout, odds, balance_before, balance_after):
+    c.execute(f'INSERT INTO bets (char_1, char_2, winner, bet_amount, payout, odds, balance_before, balance_after) VALUES ("{char_1}", "{char_2}", "{winner}", {bet_amount}, {payout}, {odds}, {balance_before}, {balance_after})')
+    conn.commit()
+
+
 def main():
     cls()
     char_1 = char_selector(max_index)
@@ -91,6 +96,7 @@ def main():
     c.execute('SELECT balance FROM bank')
     balance = c.fetchone()
     balance = clean_up_sql_out(balance,1)
+    balance_before = balance
     if balance == '0':
         print('You\'re out of funds, here\'s £10 to help you build that balance again')
         ba.amend_funds(10)
@@ -166,6 +172,7 @@ def main():
     balance = clean_up_sql_out(balance,1)
     print()
     print(f'New Balance:{balance}')
+    bet_record(char_1, char_2, winner, bet_amount, amount, odds, balance_before, balance)
 
 if __name__ == '__main__':
     print('poop')

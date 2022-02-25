@@ -62,5 +62,8 @@ c.execute('DELETE FROM records')
 
 c.execute('INSERT INTO records SELECT "index", 0, 0 ,0 from superheroes_stats')
 
+
+c.execute('CREATE TABLE bets (id INTEGER PRIMARY KEY AUTOINCREMENT, char_1 TEXT, char_2 TEXT, winner TEXT, bet_amount INT, payout INT, odds INT, balance_before INT, balance_after INT)')
+
 conn.commit()
 c.close()
