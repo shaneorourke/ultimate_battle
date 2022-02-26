@@ -185,6 +185,7 @@ def main():
     print()
     print(f'New Balance:{balance}')
     bet_record(char_1, char_2, winner, bet_amount, amount, odds, balance_before, balance)
+    ba.audit_bank()
 
 if __name__ == '__main__':
     print('poop')

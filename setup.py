@@ -63,7 +63,11 @@ c.execute('DELETE FROM records')
 c.execute('INSERT INTO records SELECT "index", 0, 0 ,0 from superheroes_stats')
 
 
-c.execute('CREATE TABLE bets (id INTEGER PRIMARY KEY AUTOINCREMENT, char_1 TEXT, char_2 TEXT, winner TEXT, bet_amount INT, payout INT, odds INT, balance_before INT, balance_after INT)')
+c.execute('CREATE TABLE IF NOT EXISTS bets (id INTEGER PRIMARY KEY AUTOINCREMENT, char_1 TEXT, char_2 TEXT, winner TEXT, bet_amount INT, payout INT, odds INT, balance_before INT, balance_after INT)')
+c.execute('DELETE FROM bets')
+
+c.execute('CREATE TABLE  IF NOT EXISTS bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, balance int, time_stamp)')
+c.execute('DELETE FROM bank_history')
 
 conn.commit()
 c.close()

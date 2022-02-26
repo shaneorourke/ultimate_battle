@@ -28,7 +28,7 @@ def calc_odds(char_1,char_2):
     if wins == 0:
         wins = 1
     if (max_total == 1 or max_total == '1') and wins == 1:
-        odds = 0.1
+        odds = 0.25
     else:
         odds_2 = 1 / (int(max_total) - int(wins))
         odds = (1 / odds_2) / 100
