@@ -1,6 +1,7 @@
 import pandas as pd
 import sqlite3 as sql
 from random import randint
+import bank as ba
 
 conn = sql.connect('characters.db')
 c = conn.cursor()
@@ -68,6 +69,7 @@ c.execute('DELETE FROM bets')
 
 c.execute('CREATE TABLE  IF NOT EXISTS bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, balance int, time_stamp)')
 c.execute('DELETE FROM bank_history')
-
 conn.commit()
+
+ba.audit_bank()
 c.close()
