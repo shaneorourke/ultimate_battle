@@ -35,10 +35,15 @@ HIGH SCORE:£{highscore}
 CURRENT BALANCE:£{current_balance}
 """
 print(welcome)
-inplay = input('Press Enter To Begin')
+inplay = input('Press Enter To Begin: Enter "1" for Stats Light Mode:')
+if inplay == '1':
+    light_mode = 1
+    inplay = ''
+else:
+    light_mode = 0
 
 while inplay == '':
-    b.main()
+    b.main(light_mode)
     inplay = input('Press Enter To Continue - Any Key To Quit')
     if inplay != '':
         print('QUITING')

@@ -1,5 +1,6 @@
 import sqlite3 as sql
 from random import randint
+from xmlrpc.client import boolean
 import pandas as pd
 import bank as ba
 import odds as od
@@ -50,7 +51,7 @@ def bet_record(char_1, char_2, winner, bet_amount, payout, odds, balance_before,
     conn.commit()
 
 
-def main():
+def main(light_mode):
     cls()
     char_1 = char_selector(max_index)
     lst = ['index', char_1[0], 'name', char_1[1], 'alignment', char_1[2], 'intelligence',char_1[3],'strength',char_1[4],'speed',char_1[5],'durability',char_1[6],'power',char_1[7],'combat',char_1[8],'total',char_1[9], 'status',char_1[10], 'gender',char_1[11], 'race',char_1[12], 'publisher',char_1[13]]
@@ -78,18 +79,26 @@ def main():
         print('Combat:',char_df['combat'].iloc[iloc])
         print('Total:',round(char_df['total'].iloc[iloc],2))
 
+    def print_stats_light(iloc):
+        print('Name:',char_df['name'].iloc[iloc])
+        print('Total:',round(char_df['total'].iloc[iloc],2))
+
     print()
-    print_stats(0)
+    if light_mode != True:
+        print_stats(0)
+    else:
+        print_stats_light(0)
     print()
     print('VERSUS')
     print()
     name2 = char_df['name'].iloc[1]
     print('name:',name2)
-    print('alignment:',char_df['alignment'].iloc[1])
-    print('Status:',char_df['status'].iloc[1])
-    print('Gender:',char_df['gender'].iloc[1])
-    print('Race:',char_df['race'].iloc[1])
-    print('Publisher:',char_df['publisher'].iloc[1])
+    if light_mode != True:
+        print('alignment:',char_df['alignment'].iloc[1])
+        print('Status:',char_df['status'].iloc[1])
+        print('Gender:',char_df['gender'].iloc[1])
+        print('Race:',char_df['race'].iloc[1])
+        print('Publisher:',char_df['publisher'].iloc[1])
     print()
     name1 = char_df['name'].iloc[0]
     win_or_lose = input(f'Will {name1} Win? (yes, y, 1 OR no, n, 0):')
