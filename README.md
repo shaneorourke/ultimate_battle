@@ -1,6 +1,13 @@
 # ultimate_battle
 Gambling game (no real money needed) to bet on who will win out of all superheroes 1v1
 
+## Info
+The aim of the game is simple, make £1,000,000! 
+Do this by betting on the winner of a 1v1 between a multitude of superheroes
+The more fights won (or lost), the better (or worse) the odds will be.
+
+If you run out of money - you'll get £10, so you never really run out
+
 ## Setup (MAC and Linux)
 clone the repo
 cd into the repos directory
@@ -17,13 +24,6 @@ OR you can setup an alias to run this in an simple command
 
 ## Play the game (Windows)
 run in terminal or CMD "run_game_win.bat"
-
-## Info
-The aim of the game is simple, make £1,000,000! 
-Do this by betting on the winner of a 1v1 between a multitude of superheroes
-The more fights won (or lost), the better (or worse) the odds will be.
-
-If you run out of money - you'll get £10, so you never really run out
 
 ## Functionality to be added:
 1. Experience - Each fight won or lost change the stats of the characters, so if the worst hero losses enough he/she will gain a boost
