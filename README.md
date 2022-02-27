@@ -13,6 +13,7 @@ run "run_setup_win.bat" as admin
 ## Play the game (MAC and Linux)
 Ensure you're cd'd in the games directory
 run "run_game_mac_linux.sh"
+OR you can setup an alias to run this in an simple command 
 
 ## Play the game (Windows)
 run in terminal or CMD "run_game_win.bat"
