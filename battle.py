@@ -171,9 +171,9 @@ def main(light_mode):
 
     elif char_df['total'].iloc[0] == char_df['total'].iloc[1]:
         print('##################### Draw #####################')
-        draw1 = char_df['index'].iloc[0]
-        draw2 = char_df['index'].iloc[1]
-        c.execute(f'UPDATE records SET draws = draws+1 WHERE "index" in({draw1},{draw2})')
+        winner = char_df['index'].iloc[0]
+        loser = char_df['index'].iloc[1]
+        c.execute(f'UPDATE records SET draws = draws+1 WHERE "index" in({winner},{loser})')
         amount = 0
         conn.commit()
     else:
