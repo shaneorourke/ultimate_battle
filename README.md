@@ -30,3 +30,7 @@ If you run out of money - you'll get £10, so you never really run out
 2. Cheat detection - No mucking around the values - although, you're only cheating yourself
 3. Leader board - No idea how this'll be done but it's on a list, so there
 4. More charcters - Simplified way to add new characters and stats (relative to their power etc)
+
+
+## Credit to the source of the stats/info/power matrix
+https://www.kaggle.com/magshimimsummercamp/superheroes-info-and-stats
