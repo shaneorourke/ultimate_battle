@@ -106,11 +106,15 @@ def main():
         ba.amend_funds(10)
         balance = 10
 
-    odds = od.calc_odds(char_df['index'].iloc[0],char_df['index'].iloc[1])
+    if win_or_lose:
+        odds = od.calc_odds(char_df['index'].iloc[0],char_df['index'].iloc[1])
+    else:
+        odds = od.calc_odds(char_df['index'].iloc[1],char_df['index'].iloc[0])
+
     print(f'Odds:{odds}')
-    print('Quick bets: a=10% b=25% c=50% d=75%')
+    print('Quick bets: a=10% b=25% c=50% d=75% z=100%')
     bet_amount = input(f'Balance:£{balance} Bet Amount:£')
-    if bet_amount.lower() in ('a','b','c','d'):
+    if bet_amount.lower() in ('a','b','c','d','z'):
         if bet_amount.lower() == 'a':
             bet_amount_default = round_float(float(balance)*0.1)
         if bet_amount.lower() == 'b':
@@ -119,6 +123,8 @@ def main():
             bet_amount_default = round_float(float(balance)*0.5)
         if bet_amount.lower() == 'd':
             bet_amount_default = round_float(float(balance)*0.75)
+        if bet_amount.lower() == 'd':
+            bet_amount_default = round_float(float(balance))
     else:
         bet_amount_default = bet_amount
     bet_amount = round_float(bet_amount_default)
