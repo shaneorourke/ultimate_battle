@@ -5,6 +5,12 @@ import pandas as pd
 import bank as ba
 import odds as od
 from rich import print
+from rich.console import Console
+from rich.theme import Theme
+
+customer_theme = Theme({'info':"bold green",'vs':"bold blue",'warn':"red underline",'win':"blue bold",'draw':"yellow",'lose':"red"})
+console = Console(theme=customer_theme)
+
 
 conn = sql.connect('characters.db')
 c = conn.cursor()
@@ -63,45 +69,45 @@ def main(light_mode):
     char_2 = list_2_dict_convert(lst)
     char_df = char_df.append(char_2,ignore_index=True)
 
-    def print_stats(iloc):
-        print('Name:',char_df['name'].iloc[iloc])
-        print('Additional Data:',char_df['additionaldata'].iloc[iloc])
-        print('Alignment:',char_df['alignment'].iloc[iloc])
-        print('Status:',char_df['status'].iloc[iloc])
-        print('Gender:',char_df['gender'].iloc[iloc])
-        print('Race:',char_df['race'].iloc[iloc])
-        print('Publisher:',char_df['publisher'].iloc[iloc])
+    def print_stats(iloc,theme):
+        console.print(f"Name:[{theme}]'{char_df['name'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Additional Data:[{theme}]'{char_df['additionaldata'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Alignment:[{theme}]'{char_df['alignment'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Status:[{theme}]'{char_df['status'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Gender:[{theme}]'{char_df['gender'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Race:[{theme}]'{char_df['race'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Publisher:[{theme}]'{char_df['publisher'].iloc[iloc]}'[/{theme}]")
 
-        print('Intelligence:',char_df['intelligence'].iloc[iloc])
-        print('Strength:',char_df['strength'].iloc[iloc])
-        print('Speed:',char_df['speed'].iloc[iloc])
-        print('Durability:',char_df['durability'].iloc[iloc])
-        print('Power:',char_df['power'].iloc[iloc])
-        print('Combat:',char_df['combat'].iloc[iloc])
-        print('Total:',round(char_df['total'].iloc[iloc],2))
+        console.print(f"Intelligence:[{theme}]'{char_df['intelligence'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Strength:[{theme}]'{char_df['strength'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Speed:[{theme}]'{char_df['speed'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Durability:[{theme}]'{char_df['durability'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Power:[{theme}]'{char_df['power'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Combat:[{theme}]'{char_df['combat'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Total:[{theme}]'{round(char_df['total'].iloc[iloc],2)}'[/{theme}]")
 
-    def print_stats_light(iloc):
-        print('Name:',char_df['name'].iloc[iloc])
-        print('Additional Data:',char_df['additionaldata'].iloc[iloc])
-        print('Total:',round(char_df['total'].iloc[iloc],2))
+    def print_stats_light(iloc,theme):
+        console.print(f"Name:[{theme}]'{char_df['name'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Additional Data:'{char_df['additionaldata'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Total:'{round(char_df['total'].iloc[iloc],2)}'[/{theme}]")
 
     print()
     if light_mode != True:
-        print_stats(0)
+        print_stats(0,'info')
     else:
-        print_stats_light(0)
+        print_stats_light(0,'info')
     print()
-    print('VERSUS')
+    console.print('VERSUS',style="vs")
     print()
     name2 = char_df['name'].iloc[1]
-    print('name:',name2)
-    print('Additional Data:',char_df['additionaldata'].iloc[1])
+    console.print(f"name:[info]'{name2}'[/info]")
+    console.print(f"Additional Data:[info]'{char_df['additionaldata'].iloc[1]}'[/info]")
     if light_mode != True:
-        print('alignment:',char_df['alignment'].iloc[1])
-        print('Status:',char_df['status'].iloc[1])
-        print('Gender:',char_df['gender'].iloc[1])
-        print('Race:',char_df['race'].iloc[1])
-        print('Publisher:',char_df['publisher'].iloc[1])
+        console.print(f"alignment:[info]'{char_df['alignment'].iloc[1]}'[/info]")
+        console.print(f"Status:[info]'{char_df['status'].iloc[1]}'[/info]")
+        console.print(f"Gender:[info]'{char_df['gender'].iloc[1]}'[/info]")
+        console.print(f"Race:[info]'{char_df['race'].iloc[1]}'[/info]")
+        console.print(f"Publisher:[info]'{char_df['publisher'].iloc[1]}'[/info]")
     print()
     name1 = char_df['name'].iloc[0]
     win_or_lose = input(f'Will {name1} Win? (yes, y, 1 OR no, n, 0):')
@@ -114,7 +120,7 @@ def main(light_mode):
     balance = clean_up_sql_out(balance,1)
     balance_before = balance
     if balance == '0':
-        print('You\'re out of funds, here\'s £10 to help you build that balance again')
+        console.print('You\'re out of funds, here\'s £10 to help you build that balance again',style="warn")
         ba.amend_funds(10)
         balance = 10
 
@@ -143,14 +149,15 @@ def main(light_mode):
         bet_amount_default = bet_amount
     bet_amount = round_float(bet_amount_default)
     if round_float(bet_amount) > round_float(float(balance)):
-        print(f'You havent got the funds for this bet - Setting bet to £{balance}')
+        console.print(f'[warn]You havent got the funds for this bet - Setting bet to [/warn]£{balance}',style="warn")
         bet_amount = round_float(balance)
         wait = input('Press Enter to Continue')
 
     cls()
-
+    theme='info'
     if char_df['total'].iloc[0] > char_df['total'].iloc[1] and win_or_lose:
-        print('##################### WIN #####################')
+        console.print('##################### WIN #####################',style="win")
+        theme='win'
         winner = char_df['index'].iloc[0]
         loser = char_df['index'].iloc[1]
         c.execute(f'UPDATE records SET wins = wins+1 WHERE "index" = {winner}')
@@ -161,7 +168,9 @@ def main(light_mode):
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] < char_df['total'].iloc[1] and win_or_lose == False:
-        print('##################### WIN #####################')
+        console.print('##################### WIN #####################',style="win")
+        theme='win'
+
         winner = char_df['index'].iloc[1]
         loser = char_df['index'].iloc[0]
 
@@ -173,14 +182,17 @@ def main(light_mode):
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] == char_df['total'].iloc[1]:
-        print('##################### Draw #####################')
+        console.print('##################### Draw #####################',style="draw")
+        theme='draw'
+
         winner = char_df['index'].iloc[0]
         loser = char_df['index'].iloc[1]
         c.execute(f'UPDATE records SET draws = draws+1 WHERE "index" in({winner},{loser})')
         amount = 0
         conn.commit()
     else:
-        print('##################### LOSE #####################')
+        console.print('##################### LOSE #####################',style="lose")
+        theme='lose'
         if win_or_lose == True:
             winner = char_df['index'].iloc[0]
             loser = char_df['index'].iloc[1]
@@ -193,14 +205,14 @@ def main(light_mode):
     conn.commit()
     print(f'winner:{winner} loser:{loser}')
     if light_mode != True:
-        print_stats(0)
+        print_stats(0,theme)
     else:
-        print_stats_light(0)
+        print_stats_light(0,theme)
     print()
     if light_mode != True:
-        print_stats(1)
+        print_stats(1,theme)
     else:
-        print_stats_light(1)
+        print_stats_light(1,theme)
 
     print()
     print(f'Bet Amount£:{bet_amount}')
@@ -209,7 +221,7 @@ def main(light_mode):
     balance = c.fetchone()
     balance = clean_up_sql_out(balance,1)
     print()
-    print(f'New Balance:£{int(balance)}')
+    print(f'New Balance:£{balance}')
     bet_record(int(winner), int(loser), bet_amount, amount, odds, balance_before, balance)
     ba.audit_bank()
 
