@@ -1,0 +1,1 @@
+pushd "%~dp0" && "battle/Scripts/activate.bat" && python main_menu.py && deactivate

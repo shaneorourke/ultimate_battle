@@ -1,0 +1,1 @@
+pushd "%~dp0" && python -m venv battle && battle\Scripts\activate.bat && pip install -r requirements.txt && python -m initiate && deactivate
