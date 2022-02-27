@@ -123,7 +123,7 @@ def main():
             bet_amount_default = round_float(float(balance)*0.5)
         if bet_amount.lower() == 'd':
             bet_amount_default = round_float(float(balance)*0.75)
-        if bet_amount.lower() == 'd':
+        if bet_amount.lower() == 'z':
             bet_amount_default = round_float(float(balance))
     else:
         bet_amount_default = bet_amount
