@@ -1,13 +1,21 @@
 # ultimate_battle
 Gambling game (no real money needed) to bet on who will win out of all superheroes 1v1
 
-## Setup
+## Setup (MAC and Linux)
 clone the repo
 cd into the repos directory
-Execute setup.py (cd run the command python setup.py
+run "CHMOD 775 ./run_setup_mac_linux.sh"
+run "sudo bash ./run_setup_mac_linux.sh"
 
-## Play the game
-python run_game.py
+## Setup (Windows)
+run "run_setup_win.bat" as admin
+
+## Play the game (MAC and Linux)
+Ensure you're cd'd in the games directory
+run "run_game_mac_linux.sh"
+
+## Play the game (Windows)
+run in terminal or CMD "run_game_win.bat"
 
 ## Info
 The aim of the game is simple, make £1,000,000! 
