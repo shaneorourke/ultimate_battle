@@ -46,8 +46,8 @@ def char_selector(max_index):
         result = c.fetchone()
     return result
     
-def bet_record(char_1, char_2, winner, bet_amount, payout, odds, balance_before, balance_after):
-    c.execute(f'INSERT INTO bets (char_1, char_2, winner, bet_amount, payout, odds, balance_before, balance_after) VALUES ("{char_1}", "{char_2}", "{winner}", {bet_amount}, {payout}, {odds}, {balance_before}, {balance_after})')
+def bet_record(winner, loser, bet_amount, payout, odds, balance_before, balance_after):
+    c.execute(f'INSERT INTO bets (winner, loser, bet_amount, payout, odds, balance_before, balance_after) VALUES ({winner}, {loser}, {bet_amount}, {payout}, {odds}, {balance_before}, {balance_after})')
     conn.commit()
 
 
@@ -207,7 +207,7 @@ def main(light_mode):
     balance = clean_up_sql_out(balance,1)
     print()
     print(f'New Balance:{balance}')
-    bet_record(char_1, char_2, winner, bet_amount, amount, odds, balance_before, balance)
+    bet_record(int(winner), int(loser), bet_amount, amount, odds, balance_before, balance)
     ba.audit_bank()
 
 if __name__ == '__main__':

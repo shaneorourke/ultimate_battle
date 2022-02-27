@@ -44,7 +44,7 @@ def update_null_stats(column):
         rand_val = randint(0,int(max_value))
         if rand_val > 10:
             rand_val = rand_val / 10
-        print(f'Setting ID:{index} {column} to {rand_val} MAX Val of {max_value}')
+        #print(f'Setting ID:{index} {column} to {rand_val} MAX Val of {max_value}')
         c.execute(f'UPDATE superheroes_stats SET {column}={rand_val} WHERE "index" ={index}')
 
 columns = ('Intelligence','Strength','Speed','Durability','Power','Combat','Total')
@@ -64,7 +64,7 @@ c.execute('DELETE FROM records')
 c.execute('INSERT INTO records SELECT "index", 0, 0 ,0 from superheroes_stats')
 
 
-c.execute('CREATE TABLE IF NOT EXISTS bets (id INTEGER PRIMARY KEY AUTOINCREMENT, char_1 TEXT, char_2 TEXT, winner TEXT, bet_amount INT, payout INT, odds INT, balance_before INT, balance_after INT)')
+c.execute('CREATE TABLE IF NOT EXISTS bets (id INTEGER PRIMARY KEY AUTOINCREMENT, winner INT, loser INT, bet_amount INT, payout INT, odds INT, balance_before INT, balance_after INT)')
 c.execute('DELETE FROM bets')
 
 c.execute('CREATE TABLE  IF NOT EXISTS bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, balance int, time_stamp)')
@@ -73,3 +73,5 @@ conn.commit()
 
 ba.audit_bank()
 c.close()
+
+print('SETUP COMPLETE')
