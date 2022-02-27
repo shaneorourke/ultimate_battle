@@ -4,7 +4,7 @@ from xmlrpc.client import boolean
 import pandas as pd
 import bank as ba
 import odds as od
-
+from rich import print
 
 conn = sql.connect('characters.db')
 c = conn.cursor()
@@ -39,10 +39,10 @@ def list_2_dict_convert(a):
          
 def char_selector(max_index):
     index = randint(1,max_index)
-    c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher FROM superheroes_stats st INNER JOIN superheroes_info inf ON st.name = inf.name WHERE st."index"={index} LIMIT 1')
+    c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher, inf.additionaldata FROM superheroes_stats st INNER JOIN superheroes_info inf ON st.name = inf.name WHERE st."index"={index} LIMIT 1')
     result = c.fetchone()
     if result == None:
-        c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher FROM superheroes_stats st LEFT JOIN superheroes_info inf ON REPLACE(REPLACE(st.name," ",""),"I","") = REPLACE(inf.name," ","") WHERE st."index"={index} LIMIT 1')
+        c.execute(f'SELECT st.*, inf.status, inf.gender, inf.race, inf.publisher, inf.additionaldata FROM superheroes_stats st LEFT JOIN superheroes_info inf ON REPLACE(REPLACE(st.name," ",""),"I","") = REPLACE(inf.name," ","") WHERE st."index"={index} LIMIT 1')
         result = c.fetchone()
     return result
     
@@ -54,17 +54,18 @@ def bet_record(winner, loser, bet_amount, payout, odds, balance_before, balance_
 def main(light_mode):
     cls()
     char_1 = char_selector(max_index)
-    lst = ['index', char_1[0], 'name', char_1[1], 'alignment', char_1[2], 'intelligence',char_1[3],'strength',char_1[4],'speed',char_1[5],'durability',char_1[6],'power',char_1[7],'combat',char_1[8],'total',char_1[9], 'status',char_1[10], 'gender',char_1[11], 'race',char_1[12], 'publisher',char_1[13]]
+    lst = ['index', char_1[0], 'name', char_1[1], 'alignment', char_1[2], 'intelligence',char_1[3],'strength',char_1[4],'speed',char_1[5],'durability',char_1[6],'power',char_1[7],'combat',char_1[8],'total',char_1[9], 'status',char_1[10], 'gender',char_1[11], 'race',char_1[12], 'publisher',char_1[13], 'additionaldata',char_1[14]]
     char_1 = list_2_dict_convert(lst)
-    char_df = pd.DataFrame.from_records(char_1,index=[0],columns=['index','name','alignment','intelligence','strength','speed','durability','power','combat','total','status','gender','race','publisher'])
+    char_df = pd.DataFrame.from_records(char_1,index=[0],columns=['index','name','alignment','intelligence','strength','speed','durability','power','combat','total','status','gender','race','publisher','additionaldata'])
 
     char_2 = char_selector(max_index)
-    lst = ['index', char_2[0], 'name', char_2[1], 'alignment', char_2[2], 'intelligence',char_2[3],'strength',char_2[4],'speed',char_2[5],'durability',char_2[6],'power',char_2[7],'combat',char_2[8],'total',char_2[9], 'status',char_2[10], 'gender',char_2[11], 'race',char_2[12], 'publisher',char_2[13]]
+    lst = ['index', char_2[0], 'name', char_2[1], 'alignment', char_2[2], 'intelligence',char_2[3],'strength',char_2[4],'speed',char_2[5],'durability',char_2[6],'power',char_2[7],'combat',char_2[8],'total',char_2[9], 'status',char_2[10], 'gender',char_2[11], 'race',char_2[12], 'publisher',char_2[13], 'additionaldata',char_2[14]]
     char_2 = list_2_dict_convert(lst)
     char_df = char_df.append(char_2,ignore_index=True)
 
     def print_stats(iloc):
         print('Name:',char_df['name'].iloc[iloc])
+        print('Additional Data:',char_df['additionaldata'].iloc[iloc])
         print('Alignment:',char_df['alignment'].iloc[iloc])
         print('Status:',char_df['status'].iloc[iloc])
         print('Gender:',char_df['gender'].iloc[iloc])
@@ -81,6 +82,7 @@ def main(light_mode):
 
     def print_stats_light(iloc):
         print('Name:',char_df['name'].iloc[iloc])
+        print('Additional Data:',char_df['additionaldata'].iloc[iloc])
         print('Total:',round(char_df['total'].iloc[iloc],2))
 
     print()
@@ -93,6 +95,7 @@ def main(light_mode):
     print()
     name2 = char_df['name'].iloc[1]
     print('name:',name2)
+    print('Additional Data:',char_df['additionaldata'].iloc[1])
     if light_mode != True:
         print('alignment:',char_df['alignment'].iloc[1])
         print('Status:',char_df['status'].iloc[1])
@@ -206,7 +209,7 @@ def main(light_mode):
     balance = c.fetchone()
     balance = clean_up_sql_out(balance,1)
     print()
-    print(f'New Balance:{balance}')
+    print(f'New Balance:£{int(balance)}')
     bet_record(int(winner), int(loser), bet_amount, amount, odds, balance_before, balance)
     ba.audit_bank()
 

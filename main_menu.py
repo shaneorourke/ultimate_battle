@@ -1,5 +1,6 @@
 import battle as b
 import sqlite3 as sql
+from rich import print
 
 conn = sql.connect('characters.db')
 c = conn.cursor()
