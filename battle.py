@@ -114,6 +114,8 @@ def main():
     print(f'Odds:{odds}')
     print('Quick bets: a=10% b=25% c=50% d=75% z=100%')
     bet_amount = input(f'Balance:£{balance} Bet Amount:£')
+    if bet_amount == '' or bet_amount == None:
+        bet_amount_default = 1
     if bet_amount.lower() in ('a','b','c','d','z'):
         if bet_amount.lower() == 'a':
             bet_amount_default = round_float(float(balance)*0.1)
