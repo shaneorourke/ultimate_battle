@@ -189,9 +189,15 @@ def main(light_mode):
         ba.amend_funds(amount)
     conn.commit()
     print(f'winner:{winner} loser:{loser}')
-    print_stats(0)
+    if light_mode != False:
+        print_stats(0)
+    else:
+        print_stats_light(0)
     print()
-    print_stats(1)
+    if light_mode != False:
+        print_stats(1)
+    else:
+        print_stats_light(1)
 
     print()
     print(f'Bet Amount£:{bet_amount}')
