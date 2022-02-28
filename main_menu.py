@@ -46,6 +46,7 @@ welcome = """
 """
 md = Markdown(welcome)
 console.print(md)
+console.print()
 inplay = console.input('Press Enter To Begin: Enter "1" for Stats Light Mode:')
 if inplay == '1':
     light_mode = 1
