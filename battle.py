@@ -8,7 +8,8 @@ from rich import print
 from rich.console import Console
 from rich.theme import Theme
 
-customer_theme = Theme({'info':"bold green",'vs':"bold blue",'warn':"red underline",'win':"blue bold",'draw':"yellow",'lose':"red"})
+
+customer_theme = Theme({'info':"bold green italic",'vs':"bold blue",'warn':"red underline",'win':"blue bold",'draw':"yellow",'lose':"red bold",'winlabel':"blue bold blink",'drawlabel':"yellow blink",'loselabel':"red bold blink"})
 console = Console(theme=customer_theme)
 
 
@@ -36,7 +37,7 @@ def round_float(value):
 max_index = int(clean_up_sql_out(max_index,0))
 
 def cls():
-    print('\n'*50)
+    console.print('\n'*50)
 
 def list_2_dict_convert(a):
     it = iter(a)
@@ -91,14 +92,14 @@ def main(light_mode):
         console.print(f"Additional Data:[{theme}]'{char_df['additionaldata'].iloc[iloc]}'[/{theme}]")
         console.print(f"Total:[{theme}]'{round(char_df['total'].iloc[iloc],2)}'[/{theme}]")
 
-    print()
+    console.print()
     if light_mode != True:
         print_stats(0,'info')
     else:
         print_stats_light(0,'info')
-    print()
+    console.print()
     console.print('VERSUS',style="vs")
-    print()
+    console.print()
     name2 = char_df['name'].iloc[1]
     console.print(f"name:[info]'{name2}'[/info]")
     console.print(f"Additional Data:[info]'{char_df['additionaldata'].iloc[1]}'[/info]")
@@ -108,9 +109,10 @@ def main(light_mode):
         console.print(f"Gender:[info]'{char_df['gender'].iloc[1]}'[/info]")
         console.print(f"Race:[info]'{char_df['race'].iloc[1]}'[/info]")
         console.print(f"Publisher:[info]'{char_df['publisher'].iloc[1]}'[/info]")
-    print()
+    console.print()
     name1 = char_df['name'].iloc[0]
-    win_or_lose = input(f'Will {name1} Win? (yes, y, 1 OR no, n, 0):')
+    win_lose_statement = f'Will [info]{name1}[/info] Win? (yes, y, 1 OR no, n, 0):'
+    win_or_lose = console.input(win_lose_statement)
     if win_or_lose.lower() in ('yes',str(1),'y'):
         win_or_lose = True
     else:
@@ -129,9 +131,9 @@ def main(light_mode):
     else:
         odds = od.calc_odds(char_df['index'].iloc[1],char_df['index'].iloc[0])
 
-    print(f'Odds:{odds}')
-    print('Quick bets: a=10% b=25% c=50% d=75% z=100%')
-    bet_amount = input(f'Balance:£{balance} Bet Amount:£')
+    console.print(f'Odds:{odds}')
+    console.print('Quick bets: a=10% b=25% c=50% d=75% z=100%')
+    bet_amount = console.input(f'Balance:£{balance} Bet Amount:£')
     if bet_amount == '' or bet_amount == None:
         bet_amount_default = 1
     if bet_amount.lower() in ('a','b','c','d','z'):
@@ -151,7 +153,7 @@ def main(light_mode):
     if round_float(bet_amount) > round_float(float(balance)):
         console.print(f'[warn]You havent got the funds for this bet - Setting bet to [/warn]£{balance}',style="warn")
         bet_amount = round_float(balance)
-        wait = input('Press Enter to Continue')
+        wait = console.input('Press Enter to Continue')
 
     cls()
     theme='info'
@@ -168,7 +170,7 @@ def main(light_mode):
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] < char_df['total'].iloc[1] and win_or_lose == False:
-        console.print('##################### WIN #####################',style="win")
+        console.print('##################### WIN #####################',style="winlabel")
         theme='win'
 
         winner = char_df['index'].iloc[1]
@@ -182,7 +184,7 @@ def main(light_mode):
         ba.amend_funds(amount)
 
     elif char_df['total'].iloc[0] == char_df['total'].iloc[1]:
-        console.print('##################### Draw #####################',style="draw")
+        console.print('##################### Draw #####################',style="drawlabel")
         theme='draw'
 
         winner = char_df['index'].iloc[0]
@@ -191,7 +193,7 @@ def main(light_mode):
         amount = 0
         conn.commit()
     else:
-        console.print('##################### LOSE #####################',style="lose")
+        console.print('##################### LOSE #####################',style="loselabel")
         theme='lose'
         if win_or_lose == True:
             winner = char_df['index'].iloc[0]
@@ -203,27 +205,27 @@ def main(light_mode):
         amount = round_float(bet_amount*-1)
         ba.amend_funds(amount)
     conn.commit()
-    print(f'winner:{winner} loser:{loser}')
+    console.print(f'winner:{winner} loser:{loser}')
     if light_mode != True:
         print_stats(0,theme)
     else:
         print_stats_light(0,theme)
-    print()
+    console.print()
     if light_mode != True:
         print_stats(1,theme)
     else:
         print_stats_light(1,theme)
 
-    print()
-    print(f'Bet Amount£:{bet_amount}')
-    print(f'Payout:£{amount}')
+    console.print()
+    console.print(f'Bet Amount£:{bet_amount}')
+    console.print(f'Payout:£{amount}')
     c.execute('SELECT balance FROM bank')
     balance = c.fetchone()
     balance = clean_up_sql_out(balance,1)
-    print()
-    print(f'New Balance:£{balance}')
+    console.print()
+    console.print(f'New Balance:£{balance}')
     bet_record(int(winner), int(loser), bet_amount, amount, odds, balance_before, balance)
     ba.audit_bank()
 
 if __name__ == '__main__':
-    print('poop')
+    console.print('poop')
