@@ -88,8 +88,8 @@ def main(light_mode):
 
     def print_stats_light(iloc,theme):
         console.print(f"Name:[{theme}]'{char_df['name'].iloc[iloc]}'[/{theme}]")
-        console.print(f"Additional Data:'{char_df['additionaldata'].iloc[iloc]}'[/{theme}]")
-        console.print(f"Total:'{round(char_df['total'].iloc[iloc],2)}'[/{theme}]")
+        console.print(f"Additional Data:[{theme}]'{char_df['additionaldata'].iloc[iloc]}'[/{theme}]")
+        console.print(f"Total:[{theme}]'{round(char_df['total'].iloc[iloc],2)}'[/{theme}]")
 
     print()
     if light_mode != True:
