@@ -6,7 +6,8 @@ The aim of the game is simple, make £1,000,000!
 Do this by betting on the winner of a 1v1 between a multitude of superheroes
 The more fights won (or lost), the better (or worse) the odds will be.
 
-If you run out of money - you'll get £10, so you never really run out
+If you run out of money - you'll get "pit of dispare" money, which is equal to the number of bets you've made, so you never really run out
+And the more bets you make, the easier it'll be to climb back up once you inevitably lose it all.
 
 ## Setup (MAC and Linux)
 clone the repo
