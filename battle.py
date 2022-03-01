@@ -57,6 +57,11 @@ def bet_record(winner, loser, bet_amount, payout, odds, balance_before, balance_
     c.execute(f'INSERT INTO bets (winner, loser, bet_amount, payout, odds, balance_before, balance_after) VALUES ({winner}, {loser}, {bet_amount}, {payout}, {odds}, {balance_before}, {balance_after})')
     conn.commit()
 
+def pit_of_dispare_value():
+    c.execute('SELECT COUNT(*) FROM bets')
+    value = c.fetchone()
+    value = int(clean_up_sql_out(value,1))
+    return value
 
 def main(light_mode):
     cls()
@@ -122,9 +127,10 @@ def main(light_mode):
     balance = clean_up_sql_out(balance,1)
     balance_before = balance
     if balance == '0':
-        console.print('You\'re out of funds, here\'s £10 to help you build that balance again',style="warn")
-        ba.amend_funds(10)
-        balance = 10
+        pit_of_dispare_amount = pit_of_dispare_value()
+        console.print(f'You\'re out of funds, here\'s £{pit_of_dispare_amount} to help you build that balance again',style="warn")
+        ba.amend_funds(pit_of_dispare_amount)
+        balance = pit_of_dispare_amount
 
     if win_or_lose:
         odds = od.calc_odds(char_df['index'].iloc[0],char_df['index'].iloc[1])
